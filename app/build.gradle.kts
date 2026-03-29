@@ -65,6 +65,7 @@ dependencies {
     // Feature modules
     implementation(project(":feature:login"))
     implementation(project(":feature:marketstream"))
+    implementation(project(":feature:trade"))
 
     // AndroidX Core
     implementation(libs.androidx.core.ktx)

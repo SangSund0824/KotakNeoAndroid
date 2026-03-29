@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import com.example.feature.login.AuthFlowScreen
 import com.example.feature.login.AuthState
 import com.example.feature.marketstream.ui.MarketStreamScreen
-import com.example.feature.marketstream.ui.PlaceOrderScreen
 import com.example.feature.marketstream.ui.PortfolioScreen
+import com.example.feature.trade.ui.PlaceOrderScreen
 import com.example.kotakneoapp.ui.theme.KotakNeoAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel

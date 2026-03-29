@@ -1,4 +1,4 @@
-package com.example.feature.marketstream
+package com.example.feature.trade
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

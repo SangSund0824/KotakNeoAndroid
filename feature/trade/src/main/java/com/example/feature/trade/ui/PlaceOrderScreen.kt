@@ -1,4 +1,4 @@
-package com.example.feature.marketstream.ui
+package com.example.feature.trade.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.feature.marketstream.OrderViewModel
+import com.example.feature.trade.OrderViewModel
 
 @Composable
 fun PlaceOrderScreen(
@@ -45,7 +45,6 @@ fun PlaceOrderScreen(
                 Text("Loading stocks...", style = MaterialTheme.typography.bodySmall)
             }
 
-            // Stock search field
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = {
@@ -64,7 +63,6 @@ fun PlaceOrderScreen(
                 }
             )
 
-            // Search results dropdown
             if (showDropdown && state.searchResults.isNotEmpty()) {
                 Card(
                     modifier = Modifier
