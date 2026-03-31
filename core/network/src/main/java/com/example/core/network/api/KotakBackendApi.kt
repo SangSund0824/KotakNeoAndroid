@@ -3,6 +3,7 @@ package com.example.core.network.api
 import com.example.core.network.model.auth.*
 import com.example.core.network.model.order.OrderRequest
 import com.example.core.network.model.market.*
+import com.example.core.network.model.portfolio.HoldingsResponse
 import com.example.core.network.model.portfolio.PositionsResponse
 import com.example.core.network.utils.NetworkResponse
 import retrofit2.http.*
@@ -60,6 +61,9 @@ interface KotakBackendApi {
     @POST("/trade/place-order")
     suspend fun placeOrder(@Body request: OrderRequest): NetworkResponse<Map<String, Any>>
 
-    @GET("/portfolio/positions")
+    @GET("/portfolio")
+    suspend fun getHoldings(): NetworkResponse<HoldingsResponse>
+
+    @GET("/positions")
     suspend fun getPositions(): NetworkResponse<PositionsResponse>
 }

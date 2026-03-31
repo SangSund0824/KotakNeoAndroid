@@ -10,20 +10,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.feature.login.AuthFlowScreen
 import com.example.feature.login.AuthState
 import com.example.feature.marketstream.ui.MarketStreamScreen
-import com.example.feature.marketstream.ui.PortfolioScreen
+import com.example.feature.portfolio.ui.PortfolioScreen
+import com.example.feature.positions.ui.PositionsScreen
 import com.example.feature.trade.ui.PlaceOrderScreen
 import com.example.kotakneoapp.ui.theme.KotakNeoAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.feature.login.LoginViewModel
 
-enum class BottomTab { HOME, TRADE, PORTFOLIO }
+enum class BottomTab { HOME, TRADE, POSITIONS, PORTFOLIO }
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,10 +34,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KotakNeoAppTheme {
-                var authData by remember { mutableStateOf<Triple<String, String, String>?>(null) }
+                var isAuthenticated by remember { mutableStateOf(false) }
                 var selectedTab by remember { mutableStateOf(BottomTab.HOME) }
 
-                if (authData == null) {
+                if (!isAuthenticated) {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                         AuthFlowScreen(
                             onAuthSuccess = { },
@@ -45,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         val vm: LoginViewModel = hiltViewModel()
                         val state = vm.authState.collectAsState().value
                         if (state is AuthState.Authenticated) {
-                            authData = Triple(state.baseUrl, state.token, state.sid)
+                            isAuthenticated = true
                         }
                     }
                 } else {
@@ -66,6 +68,12 @@ class MainActivity : ComponentActivity() {
                                     label = { Text("Trade") }
                                 )
                                 NavigationBarItem(
+                                    selected = selectedTab == BottomTab.POSITIONS,
+                                    onClick = { selectedTab = BottomTab.POSITIONS },
+                                    icon = { Icon(Icons.Default.TrendingUp, contentDescription = "Positions") },
+                                    label = { Text("Positions") }
+                                )
+                                NavigationBarItem(
                                     selected = selectedTab == BottomTab.PORTFOLIO,
                                     onClick = { selectedTab = BottomTab.PORTFOLIO },
                                     icon = { Icon(Icons.Default.AccountBalance, contentDescription = "Portfolio") },
@@ -74,15 +82,14 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) { innerPadding ->
-                        val (baseUrl, token, sid) = authData!!
                         when (selectedTab) {
                             BottomTab.HOME -> MarketStreamScreen(
-                                baseUrl = baseUrl,
-                                token = token,
-                                sid = sid,
                                 modifier = Modifier.padding(innerPadding)
                             )
                             BottomTab.TRADE -> PlaceOrderScreen(
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                            BottomTab.POSITIONS -> PositionsScreen(
                                 modifier = Modifier.padding(innerPadding)
                             )
                             BottomTab.PORTFOLIO -> PortfolioScreen(

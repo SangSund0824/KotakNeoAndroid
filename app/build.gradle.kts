@@ -66,6 +66,8 @@ dependencies {
     implementation(project(":feature:login"))
     implementation(project(":feature:marketstream"))
     implementation(project(":feature:trade"))
+    implementation(project(":feature:portfolio"))
+    implementation(project(":feature:positions"))
 
     // AndroidX Core
     implementation(libs.androidx.core.ktx)

@@ -57,6 +57,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideOrderFeedWebSocketClient(
+        okHttpClient: OkHttpClient
+    ): com.example.core.network.websocket.OrderFeedWebSocketClient {
+        return com.example.core.network.websocket.OrderFeedWebSocketClient(okHttpClient)
+    }
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -112,4 +120,16 @@ object NetworkModule {
     fun provideOrderDataSource(
         orderRetrofitDataSource: com.example.core.network.datasource.OrderRetrofitDataSource
     ): com.example.core.network.datasource.OrderDataSource = orderRetrofitDataSource
+
+    @Provides
+    @Singleton
+    fun providePortfolioDataSource(
+        portfolioRetrofitDataSource: com.example.core.network.datasource.PortfolioRetrofitDataSource
+    ): com.example.core.network.datasource.PortfolioDataSource = portfolioRetrofitDataSource
+
+    @Provides
+    @Singleton
+    fun providePositionsDataSource(
+        positionsRetrofitDataSource: com.example.core.network.datasource.PositionsRetrofitDataSource
+    ): com.example.core.network.datasource.PositionsDataSource = positionsRetrofitDataSource
 }

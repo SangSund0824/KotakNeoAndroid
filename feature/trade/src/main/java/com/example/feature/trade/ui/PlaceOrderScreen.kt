@@ -80,7 +80,7 @@ fun PlaceOrderScreen(
                                     Text(stock.pSymbolName ?: "", style = MaterialTheme.typography.bodySmall)
                                 },
                                 modifier = Modifier.clickable {
-                                    tradingSymbol = stock.pSymbolName ?: stock.pTrdSymbol
+                                    tradingSymbol = stock.pTrdSymbol
                                     searchQuery = stock.pTrdSymbol
                                     showDropdown = false
                                     viewModel.clearSearch()

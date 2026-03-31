@@ -7,7 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface StockDao {
-    @Query("SELECT * FROM stocks WHERE pTrdSymbol LIKE '%' || :query || '%' OR pSymbolName LIKE '%' || :query || '%' LIMIT 20")
+    @Query("SELECT * FROM stocks WHERE (pTrdSymbol LIKE '%' || :query || '%' OR pSymbolName LIKE '%' || :query || '%') AND pTrdSymbol LIKE '%-EQ' LIMIT 20")
     suspend fun search(query: String): List<StockEntity>
 
     @Query("SELECT COUNT(*) FROM stocks")
