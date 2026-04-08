@@ -26,6 +26,9 @@ local.properties
 .idea/
 .DS_Store
 
+# Kotlin compiler files
+.kotlin/
+
 # NDK
 obj/
 
