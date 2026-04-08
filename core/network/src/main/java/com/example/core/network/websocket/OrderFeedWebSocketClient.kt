@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import okhttp3.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.inject.Named
 
 data class OrderUpdate(
     val raw: String,
@@ -14,18 +15,15 @@ data class OrderUpdate(
 
 @Singleton
 class OrderFeedWebSocketClient @Inject constructor(
-    private val okHttpClient: OkHttpClient
+    private val okHttpClient: OkHttpClient,
+    @Named("ws_order_url") private val wsUrl: String
 ) {
     private var webSocket: WebSocket? = null
     private val _updates = MutableSharedFlow<OrderUpdate>(extraBufferCapacity = 64)
     val updates: SharedFlow<OrderUpdate> = _updates.asSharedFlow()
 
-    companion object {
-        private const val WS_URL = "wss://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/ws/orderfeed"
-    }
-
     fun connect() {
-        val request = Request.Builder().url(WS_URL).build()
+        val request = Request.Builder().url(wsUrl).build()
 
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {

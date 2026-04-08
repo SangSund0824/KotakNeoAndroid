@@ -34,15 +34,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KotakNeoAppTheme {
+                val vm: LoginViewModel = hiltViewModel()
                 var isAuthenticated by remember { mutableStateOf(false) }
                 var selectedTab by remember { mutableStateOf(BottomTab.TRADE) }
 
+                // Observe auth state changes
+                val authState = vm.authState.collectAsState().value
+                LaunchedEffect(authState) {
+                    isAuthenticated = authState is AuthState.Authenticated
+                }
+
                 if (!isAuthenticated) {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        val vm: LoginViewModel = hiltViewModel()
-                        val state = vm.authState.collectAsState().value
-                        
-                        when (state) {
+                        when (authState) {
                             is AuthState.CheckingSession -> {
                                 // Show loading while checking session
                                 Box(
@@ -52,23 +56,15 @@ class MainActivity : ComponentActivity() {
                                     CircularProgressIndicator()
                                 }
                             }
-                            is AuthState.Authenticated -> {
-                                isAuthenticated = true
-                            }
                             else -> {
                                 AuthFlowScreen(
                                     onAuthSuccess = { },
                                     modifier = Modifier.padding(innerPadding)
                                 )
-                                
-                                if (state is AuthState.Authenticated) {
-                                    isAuthenticated = true
-                                }
                             }
                         }
                     }
                 } else {
-                    val vm: LoginViewModel = hiltViewModel()
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         topBar = {
@@ -77,7 +73,6 @@ class MainActivity : ComponentActivity() {
                                 actions = {
                                     IconButton(onClick = { 
                                         vm.logout()
-                                        isAuthenticated = false 
                                     }) {
                                         Icon(Icons.Default.ExitToApp, contentDescription = "Logout")
                                     }

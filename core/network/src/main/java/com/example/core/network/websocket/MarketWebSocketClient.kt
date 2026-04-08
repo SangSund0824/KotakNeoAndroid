@@ -7,6 +7,7 @@ import okhttp3.*
 import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.inject.Named
 
 data class MarketTick(
     val symbol: String,
@@ -17,7 +18,8 @@ data class MarketTick(
 
 @Singleton
 class MarketWebSocketClient @Inject constructor(
-    private val okHttpClient: OkHttpClient
+    private val okHttpClient: OkHttpClient,
+    @Named("ws_market_url") private val wsUrl: String
 ) {
     private var webSocket: WebSocket? = null
     private val _ticks = MutableSharedFlow<MarketTick>(extraBufferCapacity = 256)
@@ -25,13 +27,9 @@ class MarketWebSocketClient @Inject constructor(
 
     private var isConnected = false
 
-    companion object {
-        private const val WS_URL = "wss://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/ws/marketfeed"
-    }
-
     fun connect() {
         if (isConnected) return
-        val request = Request.Builder().url(WS_URL).build()
+        val request = Request.Builder().url(wsUrl).build()
 
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {

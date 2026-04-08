@@ -27,6 +27,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+            buildConfigField("String", "BASE_URL", "\"http://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/\"")
+            buildConfigField("String", "WS_MARKET_URL", "\"wss://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/ws/marketfeed\"")
+            buildConfigField("String", "WS_ORDER_URL", "\"wss://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/ws/orderfeed\"")
         }
         release {
             isMinifyEnabled = false
@@ -34,6 +37,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"http://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/\"")
+            buildConfigField("String", "WS_MARKET_URL", "\"wss://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/ws/marketfeed\"")
+            buildConfigField("String", "WS_ORDER_URL", "\"wss://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/ws/orderfeed\"")
         }
     }
 

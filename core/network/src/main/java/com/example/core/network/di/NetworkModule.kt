@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
+import javax.inject.Named
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -50,17 +51,19 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMarketWebSocketClient(
-        okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient,
+        @Named("ws_market_url") wsUrl: String
     ): com.example.core.network.websocket.MarketWebSocketClient {
-        return com.example.core.network.websocket.MarketWebSocketClient(okHttpClient)
+        return com.example.core.network.websocket.MarketWebSocketClient(okHttpClient, wsUrl)
     }
 
     @Provides
     @Singleton
     fun provideOrderFeedWebSocketClient(
-        okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient,
+        @Named("ws_order_url") wsUrl: String
     ): com.example.core.network.websocket.OrderFeedWebSocketClient {
-        return com.example.core.network.websocket.OrderFeedWebSocketClient(okHttpClient)
+        return com.example.core.network.websocket.OrderFeedWebSocketClient(okHttpClient, wsUrl)
     }
 
     @Provides
@@ -87,10 +90,11 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        networkResponseAdapterFactory: NetworkResponseAdapterFactory
+        networkResponseAdapterFactory: NetworkResponseAdapterFactory,
+        @Named("base_url") baseUrl: String
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://ec2-16-170-188-211.eu-north-1.compute.amazonaws.com/")
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(networkResponseAdapterFactory)
