@@ -17,8 +17,28 @@ class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
-    private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
+    private val _authState = MutableStateFlow<AuthState>(AuthState.CheckingSession)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
+
+    init {
+        checkExistingSession()
+    }
+
+    private fun checkExistingSession() {
+        viewModelScope.launch {
+            _authState.value = AuthState.CheckingSession
+            val hasSession = sessionManager.loadSession()
+            if (hasSession && sessionManager.isSessionValid()) {
+                _authState.value = AuthState.Authenticated(
+                    sid = sessionManager.sid,
+                    token = sessionManager.token,
+                    baseUrl = sessionManager.baseUrl
+                )
+            } else {
+                _authState.value = AuthState.Idle
+            }
+        }
+    }
 
     fun login(mobileNumber: String, ucc: String, totp: String) {
         viewModelScope.launch {
@@ -55,6 +75,13 @@ class LoginViewModel @Inject constructor(
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "MPIN verification failed")
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            sessionManager.clear()
+            _authState.value = AuthState.Idle
         }
     }
 

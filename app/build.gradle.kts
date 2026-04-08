@@ -61,10 +61,11 @@ android {
 dependencies {
     // Core modules
     implementation(project(":core:data"))
+    implementation(project(":core:datastore"))
 
     // Feature modules
     implementation(project(":feature:login"))
-    implementation(project(":feature:marketstream"))
+    // implementation(project(":feature:marketstream"))
     implementation(project(":feature:trade"))
     implementation(project(":feature:portfolio"))
     implementation(project(":feature:positions"))

@@ -28,7 +28,7 @@ fun AuthFlowScreen(
             )
         }
 
-        is AuthState.Loading -> {
+        is AuthState.Loading, is AuthState.CheckingSession -> {
             LoginScreen(
                 onLoginClick = { _, _, _ -> },
                 isLoading = true,

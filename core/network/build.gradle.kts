@@ -27,6 +27,7 @@ android {
 dependencies {
     api(project(":core:common"))
     api(project(":core:model"))
+    implementation(project(":core:datastore"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
